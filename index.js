@@ -1,5 +1,5 @@
-import config from "./config";
+import app from "./server";
 import listener from "./config/listener";
-import server from "./server";
+import config from "./config";
 
-server.listen(config.port, listener);
+app.listen(config.port, listener);

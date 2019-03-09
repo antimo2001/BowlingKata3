@@ -4,12 +4,19 @@
 
 ### todo for 2019-03-09 02:14:57
 
-- [ ] initialize project folder (`npm init`, `git init`)
-- [ ] npm install all the things
-  - [ ] (`npm i body-parser  cors  express  express-jwt  express-pino-logger  express-validation)
-  - [ ] (`npm i  helmet  joi  jsonwebtoken  latest  lodash  moment  moment-timezone)
-  - [ ] (`npm i  mongo mongoclient  mongodb  pino  web3  web3-utils  websocket`)
-  - [ ] (`npm i --save-dev  @babel/core  @babel/preset-env  gulp  gulp-babel gulp-nodemon`)
+- [x] initialize project folder (`npm init`, `git init`)
+- [x] npm install all the things
+  - [x] (`npm i --save body-parser  cors  express  express-jwt  express-pino-logger  express-validation`)
+  - [x] (`npm i --save  helmet  joi  jsonwebtoken  latest  lodash  moment  moment-timezone`)
+  - [x] (`npm i --save  mongo mongoclient  mongodb  pino`)
+  - [x] (`npm i --save  web3-utils  websocket`)
+  - [x] (`npm i --save-dev  @babel/core  @babel/preset-env  gulp  gulp-babel gulp-nodemon`)
+
+### issues on 2019-03-09 03:17:13
+
+npm install fails for `web3` ...need set my PYTHON_HOME or need to research which version of python to install
+
+- [ ] research how to install web3 and its prerequisites (`npm i --save  web3`)
 
 ```js
 /// gulpfile.js
@@ -53,6 +60,19 @@ module.exports = {
 /// End of gulpfile.js
 
 ```
+
+### Requirements and Specifications for BowlingKata3 Restful API
+
+- mount path should be `/api/v0`
+- entities are User, Bowler, Game
+- Services are `/users`, `/players`, `/games`
+
+#### Specs for /users
+
+
+### TIL about Barreling; [see online gitbook here](https://basarat.gitbooks.io/typescript/docs/tips/barrel.html)
+
+A barrel is a way to rollup exports from several modules into a single convenient module. The barrel itself is a module file that re-exports selected exports of other modules.
 
 
 ## 2019-MM-DD
