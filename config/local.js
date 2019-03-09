@@ -2,7 +2,11 @@ const { PORT, NODE_ENV } = process.env;
 
 // Setup the logger config
 const log = {
-  enabled: !process.env.NOLOG
+  name: 'bowlingkata3',
+  enabled: !process.env.NOLOG,
+  level: process.env.LOGLEVEL || 'info',
+  timestamp: false,
+  useLevelLabels: true,
 }
 
 // Setup the mongodb config

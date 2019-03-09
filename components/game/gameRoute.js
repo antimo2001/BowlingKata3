@@ -1,3 +1,3 @@
 import { log } from "../../tools/log";
 
-log.info(`file found: gameRoute`);
+log.trace(`file found: gameRoute`);

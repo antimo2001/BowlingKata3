@@ -1,27 +1,26 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import logger from "express-pino-logger";
+import pinologger from "express-pino-logger";
 import config from './config';
 import mlog from './tools/mlog';
 import components from './components';
 
 let app = express();
 
+app.set('port', config.port);
+app.set('env', config.env);
+
 // view engine setup
 // Dontcare about view engine
 
-app.use(logger({
-  enabled: config.log.enabled
-}));
+app.use(pinologger(config.log));
 
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));
 // app.use(cookieParser());
 // app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/api-status', mlog(l => `routes are pending`), (req, res) => res.status(200).json({ok:'ok'}));
-
-// app.use('', components);
+app.use('', components);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

@@ -1,2 +1,2 @@
 import { log } from "../../tools/log";
-log.info(`file found: gameService`);
+log.trace(`file found: gameService`);
