@@ -4,7 +4,7 @@ import userRoute from '../components/user/userRoute';
 // import playerRoute from '../components/player/playerRoute';
 // import gameRoute from '../components/game/gameRoute';
 
-log.trace(`file found: components/routes`);
+log.trace(`file found: components/index`);
 const router = express.Router();
 
 const sendOk = (req, res) => res.status(200).json({ status: 'ok' });

@@ -69,6 +69,7 @@ module.exports = {
 
 #### Specs for /users
 
+- actions: create user, list users, authenticate user
 
 ### TIL about Barreling; [see online gitbook here](https://basarat.gitbooks.io/typescript/docs/tips/barrel.html)
 

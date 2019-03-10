@@ -23,7 +23,7 @@ export class UserService {
   static create(model) {
     log.info({ model }, `Begin UserService.create`);
     const mockdata = {
-      method: `UserService.create)`,
+      method: `UserService.create`,
       n: 1
     }
     return Promise.resolve(mockdata);
