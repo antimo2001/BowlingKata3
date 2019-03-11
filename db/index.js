@@ -1,3 +1,12 @@
-// Import and immediately export for the real DbMongo and its mock counterpart
-export * from "./DbMongo";
-export * from "../tests/mocks/MockDbMongo";
+import config from "../config";
+import {DbMongo} from "./DbMongo";
+export {MockDbMongo} from "../tests/mocks/MockDbMongo";
+let m;
+
+if (config.mongo.mock) {
+    m = MockDbMongo;
+} else {
+    m = DbMongo;
+}
+
+export default m;
