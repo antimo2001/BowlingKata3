@@ -34,9 +34,9 @@ export class UserController {
 
   /** show listing of users */
   static list(req, res, next) {
+    log.info(`Begin UserController.list`);
     try {
       const userId = req.model.get('id');
-      log.info(userId, `Begin UserController.list`);
       log.info({userId}, `userId is truthy?`);
 
       //Define handlers
@@ -65,8 +65,8 @@ export class UserController {
 
   /** create new user */
   static create(req, res, next) {
+    log.info(`Begin UserController.create`);
     try {
-      log.info(userId, `Begin UserController.create`);
       //Define handlers
       const thenSend = (data) => {
         const yes = Object.assign(data, {

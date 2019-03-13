@@ -2,7 +2,6 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import pinologger from "express-pino-logger";
 import config from './config';
-import mlog from './tools/mlog';
 import components from './components';
 
 let app = express();
