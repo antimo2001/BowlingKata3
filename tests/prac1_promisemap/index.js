@@ -1,5 +1,4 @@
 // import Promise from "bluebird";
-// const promiseall = all;
 
 class Practice1 {
   /**
