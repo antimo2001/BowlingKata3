@@ -75,12 +75,13 @@ module.exports = {
 A barrel is a way to rollup exports from several modules into a single convenient module. The barrel itself is a module file that re-exports selected exports of other modules.
 
 
-## 2019-03-NN
+## 2019-03-14
 
 ### daily logs for 2019-03-14 21:40:17
 
 - [x] research how to install web3 and its prerequisites (`npm i --save  web3`) ...nvm; i'm don't care about installing all the prerequisites like Python 2.x and Dotnet Framework 2.0 and w/e fubar crap
-- [ ] practice Promise.all and make sure babel v7 can use it or not?
+- [x] practice Promise.all and make sure babel v7 can use it or not?
+- [ ] practice seed mongodb; use csv parser
 
 ## 2019-03-NN
 
