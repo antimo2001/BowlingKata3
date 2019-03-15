@@ -63,7 +63,7 @@ module.exports = {
 ### Requirements and Specifications for BowlingKata3 Restful API
 
 - mount path should be `/api/v0`
-- entities are User, Bowler, Game
+- entities are User, Player, Game
 - Services are `/users`, `/players`, `/games`
 
 #### Specs for /users
@@ -74,14 +74,53 @@ module.exports = {
 
 A barrel is a way to rollup exports from several modules into a single convenient module. The barrel itself is a module file that re-exports selected exports of other modules.
 
-
 ## 2019-03-14
 
 ### daily logs for 2019-03-14 21:40:17
 
-- [x] research how to install web3 and its prerequisites (`npm i --save  web3`) ...nvm; i'm don't care about installing all the prerequisites like Python 2.x and Dotnet Framework 2.0 and w/e fubar crap
+- [x] research how to install web3 and its prerequisites (`npm i --save  web3`) ...nvm; don't care about installing all the prerequisites like Python 2.x and Dotnet Framework 2.0 and w/e fubar crap
 - [x] practice Promise.all and make sure babel v7 can use it or not?
 - [ ] practice seed mongodb; use csv parser
+
+data model design is like this?
+
+```js
+const USER_SEED_DATA = [
+  {
+    "user":{
+      "_id": number,
+      "username": string,
+      "secret": hexstring,
+      "email": string,
+      "firstName": string,
+      "lastName": string
+    },
+    "digitalId": string,
+  }
+]
+
+// Game is in relationship <*, *> with Player
+const GAME_SEED_DATA = [
+  {
+    "_id": number,
+    "type": string = "notype",
+    "scores": number[],
+    "players": [{ "playerId": hexstring }],
+  }
+]
+
+// User is in relationship <1, 1> with Player
+const PLAYER_SEED_DATA = [
+  {
+    "playerId": number,
+    "userId": number,
+    "displayname": string,
+    "games": [{ "gameId": hexstring }],
+  }
+]
+
+
+```
 
 ## 2019-03-NN
 
