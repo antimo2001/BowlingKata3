@@ -10,31 +10,41 @@ class Practice1 {
   }
 
   static doBlockchain() {
-    return Practice1.stall(100)
+    return Practice1.stall(3999)
       .then(() => 'done doBlockchainOperation');
   }
 
   static doOffchain() {
-    return Practice1.stall(200)
+    return Practice1.stall(99)
       .then(() => 'done doOffchain');
   }
 
   static main() {
+    const log = (r) => {
+      console.log(r);
+      return r;
+    }
     const chain = [
-      Practice1.doBlockchain(),
-      Practice1.doOffchain()
+      Practice1.doBlockchain().then(log),
+      Practice1.doOffchain().then(log),
     ];
     return Promise.all(chain);
   }
 }
 
 {
-  if (!process.env.DISABLETESTLOCALSEED) {
+  if (!process.env.DISABLETESTPRACTICE) {
+    console.log(`Begin Practice1`);
     Practice1.main()
-      .then(console.log);
+      .then(results => {
+        console.log(`done both; destruc results`);
+        const [a, b] = results;
+        console.log(a);
+        console.log(b);
+      });
   }
   else {
-    console.log(`WARN: TESTLOCALSEED is disabled!`);
+    console.log(`WARN: TESTPRACTICE is disabled!`);
   }
 }
 
