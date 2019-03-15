@@ -82,7 +82,7 @@ A barrel is a way to rollup exports from several modules into a single convenien
 - [x] practice Promise.all and make sure babel v7 can use it or not?
 - [ ] practice seed mongodb; use csv parser
 
-data model design is like this?
+### intial data model design is like this
 
 ```js
 const USER_SEED_DATA = [
