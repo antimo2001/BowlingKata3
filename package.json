@@ -26,8 +26,6 @@
     "mongoclient": "^1.0.3",
     "mongodb": "^3.1.13",
     "pino": "^5.11.1",
-    "web3": "1.0.0-beta.48",
-    "web3-utils": "^1.0.0-beta.48",
     "websocket": "^1.0.28"
   },
   "devDependencies": {
@@ -38,9 +36,11 @@
     "gulp-nodemon": "^2.4.2"
   },
   "scripts": {
+    "clean": "rm -rf dist",
     "test": "npm run test-prac1",
     "test-local1": "SET NODE_ENV=local&& gulp build && node dist/index",
     "test-prac1": "gulp build && node dist/tests/prac1_promisemap/index",
+    "test-prac2": "gulp build && node dist/tests/prac1_promisemap/index",
     "prestart": "npm install && gulp build",
     "start": "node dist/index",
     "prebuild": "npm ci",
