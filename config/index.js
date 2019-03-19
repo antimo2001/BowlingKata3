@@ -13,12 +13,12 @@ switch (NODE_ENV) {
     config = production;
     break;
   default:
-    config = {
-      'error': `Unknown NODE_ENV:(${NODE_ENV}) ...cannot continue config`
-    }
+    console.error(`Unknown NODE_ENV:(${NODE_ENV}) ...use local.js`);
+    config = local;
     break;
 }
 
+// console.log(`config/index: config.log.enabled===${config.log.enabled}`);
 config = Object.freeze(config);
 
 export default config;

@@ -7,7 +7,7 @@ const paths = ['./**/*.js', '!dist/**', '!node_modules/**']
 let build = () => {
   return gulp
     .src(paths)
-    .pipe(babel({}))
+    .pipe(babel())
     .pipe(gulp.dest('dist'))
 }
 
@@ -23,8 +23,8 @@ let watcher = (done) => {
   // Restart if app crashes
   stream
     .on('crash', () => {
-      console.log('Application crashed!')
-      stream.emit('restart', 10)
+      console.log('Application crashed!');
+      stream.emit('restart', 10);
     })
 
 }

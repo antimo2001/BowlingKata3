@@ -16,7 +16,6 @@
 
 npm install fails for `web3` ...need set my PYTHON_HOME or need to research which version of python to install
 
-
 ```js
 /// gulpfile.js
 
@@ -118,7 +117,6 @@ const PLAYER_SEED_DATA = [
     "games": [{ "gameId": hexstring }],
   }
 ]
-
 
 ```
 
