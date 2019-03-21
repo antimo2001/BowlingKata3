@@ -79,7 +79,6 @@ A barrel is a way to rollup exports from several modules into a single convenien
 
 - [x] research how to install web3 and its prerequisites (`npm i --save  web3`) ...nvm; don't care about installing all the prerequisites like Python 2.x and Dotnet Framework 2.0 and w/e fubar crap
 - [x] practice Promise.all and make sure babel v7 can use it or not?
-- [ ] practice seed mongodb; use csv parser
 
 ### intial data model design is like this
 
@@ -119,6 +118,13 @@ const PLAYER_SEED_DATA = [
 ]
 
 ```
+
+## 2019-03-21
+
+## daily logs for 2019-03-21 06:01:52
+
+- [x] practice mongoose (started on userModel)
+- [ ] practice seed mongodb; use csv parser
 
 ## 2019-03-NN
 
