@@ -12,7 +12,7 @@ app.set('env', config.env);
 // view engine setup
 // Dontcare about view engine
 
-app.use(pinologger(config.log));
+// app.use(pinologger(config.log));
 
 app.use(bodyParser.json());
 // app.use(bodyParser.urlencoded({ extended: false }));

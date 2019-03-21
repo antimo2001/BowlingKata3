@@ -1,8 +1,6 @@
 import config from "../config";
 import pino from "pino";
 
-let log = pino({
-  enable: config.log.enabled
-});
+let log = pino(config.log);
 
 export default log;
