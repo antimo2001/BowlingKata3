@@ -1,4 +1,5 @@
-import log from "../../tools/log";
+// import log from "../../tools/log";
+import log from "./userLogger";
 import User from "./userModel";
 log.trace(`file found: userService`);
 
@@ -25,13 +26,17 @@ export class UserService {
    * @param {Map<string,value>} model the data to insert and create user
    */
   static create(model) {
-    log.info({ model }, `Begin UserService.create`);
+    log.info(`Begin UserService.create`);
     try {
       const username = model.get('username');
       const secret = model.get('secret');
       const email = model.get('email');
-      let user = new User();
-      return user.save({username, secret, email});
+      let user = new User({ username, secret, email });
+      return user.save()
+        .then(r => {
+          log.info({user}, `Successful user.save()`);
+          return r;
+        });
     }
     catch (error) {
       log.error(error, `Error during UserService.create`);
@@ -52,6 +57,7 @@ export class UserService {
       m.set('username', username);
       m.set('secret', secret);
       m.set('email', email);
+      log.info({username, secret, email}, `Done setModel`);
     }
     catch (error) {
       log.error(error, `Error during UserService.setModel`);

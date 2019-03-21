@@ -1,4 +1,5 @@
-import log from "../../tools/log";
+// import log from "../../tools/log";
+import log from "./userLogger";
 import {UserService} from "./userService";
 
 log.trace(`file found: UserController`);
@@ -67,7 +68,7 @@ export class UserController {
   static create(req, res, next) {
     log.info(`Begin UserController.create`);
     try {
-      UserController.resetModel(req);
+      // UserController.resetModel(req);
       req.model = UserService.setModel(req.body);
 
       //Define handlers

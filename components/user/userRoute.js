@@ -1,5 +1,6 @@
 import express from 'express';
-import log from "../../tools/log";
+// import log from "../../tools/log";
+import log from "./userLogger";
 import {UserController} from "./userController";
 log.trace(`file found: user/userRoute`);
 
