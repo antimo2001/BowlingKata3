@@ -8,7 +8,7 @@ log.trace(`file found: UserController`);
  */
 export class UserController {
   
-  static reset(req) {
+  static resetModel(req) {
     //Reset the model
     req.model = new Map();
   }
@@ -16,7 +16,7 @@ export class UserController {
   /** validate userId */
   static validateId(req, res, next, userId) {
     log.info(`Begin UserController.validateId`);
-    UserController.reset(req);
+    UserController.resetModel(req);
 
     if (!userId) {
       let e = new Error('userId is not valid; cannot continue the resource');
@@ -36,25 +36,25 @@ export class UserController {
   static list(req, res, next) {
     log.info(`Begin UserController.list`);
     try {
-      const userId = req.model.get('id');
-      log.info({userId}, `userId is truthy?`);
+      // const userId = req.model.get('id');
+      // log.info({userId}, `userId was set to`);
 
       //Define handlers
       const thenSend = (data) => {
         const yes = Object.assign(data, {
           success: true,
-          error: ''
+          results: data
         });
         return res.status(200).json(yes);
       }
-      const whenError = (error) => {
-        log.error(error, `Error from UserService.list`);
-        return next(error);
-      }
+
       //Invoke data-service with handlers
-      return UserService.list(userId)
+      return UserService.list()
         .then(thenSend)
-        .catch(whenError);
+        .catch(error => {
+          log.error(error, `Error from UserService.list`);
+          return next(error);
+        });
     }
     catch (error) {
       log.error(error, `Error during UserController.list`);
@@ -67,22 +67,24 @@ export class UserController {
   static create(req, res, next) {
     log.info(`Begin UserController.create`);
     try {
+      UserController.resetModel(req);
+      req.model = UserService.setModel(req.body);
+
       //Define handlers
       const thenSend = (data) => {
-        const yes = Object.assign(data, {
+        return res.status(200).json({
           success: true,
+          results: data,
           error: ''
         });
-        return res.status(200).json(yes);
-      }
-      const whenError = (error) => {
-        log.error(error, `Error from UserService.create`);
-        return next(error);
       }
       //Invoke data-service with handlers
       return UserService.create(req.model)
         .then(thenSend)
-        .catch(whenError);
+        .catch(error => {
+          log.error(error, `Error from UserService.create`);
+          return next(error);
+        });
     }
     catch (error) {
       log.error(error, `Error during UserController.create`);

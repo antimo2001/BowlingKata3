@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.param('userId', UserController.validateId);
 
-router.route('/:userId')
-  .get(UserController.list)
-  .post(UserController.create)
-  .put(UserController.updateOne)
-  .delete(UserController.deleteOne);
+router.route('/list').get(UserController.list);
+router.route('/create').post(UserController.create);
+
+router.route('/:userId').put(UserController.updateOne);
+router.route('/:userId').delete(UserController.deleteOne);
 
 export default router;

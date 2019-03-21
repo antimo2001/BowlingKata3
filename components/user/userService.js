@@ -1,32 +1,63 @@
 import log from "../../tools/log";
+import User from "./userModel";
 log.trace(`file found: userService`);
 
 export class UserService {
   /**
-   *
+   * Fetches list of users
    * @param {hexstring} userId the userId to use to fetch user data
+   * @returns Promise<User[]>
    */
-  static list(userId) {
+  static list(userId = null) {
     log.info({userId}, `Begin UserService.list`);
-    const mockdata = {
-      name: `Alice Apple ${userId}`,
-      firstName: `Alice`,
-      lastName: `Apple`,
-      id: userId,
+    
+    if (!userId) {
+      log.info(`Fetch all users`);
+      return User.find();
     }
-    return Promise.resolve(mockdata);
+    else {
+      log.info({userId}, `Fetch one user`);
+      return User.find({_id: userId});
+    }
   }
   /**
-   *
+   * Creates new user in database
    * @param {Map<string,value>} model the data to insert and create user
    */
   static create(model) {
     log.info({ model }, `Begin UserService.create`);
-    const mockdata = {
-      method: `UserService.create`,
-      n: 1
+    try {
+      const username = model.get('username');
+      const secret = model.get('secret');
+      const email = model.get('email');
+      let user = new User();
+      return user.save({username, secret, email});
     }
-    return Promise.resolve(mockdata);
+    catch (error) {
+      log.error(error, `Error during UserService.create`);
+      throw error;
+    }
+  }
+  /**
+   * Create hashmap given the request-body
+   * @param {any} body expressjs-request-body
+   * @returns Map<string, any>
+   */
+  static setModel(body) {
+    log.info(`Begin UserService.setModel`);
+    let m = new Map();
+    try {
+      log.info(Object.getOwnPropertyNames(body));
+      let {username, secret, email} = body;
+      m.set('username', username);
+      m.set('secret', secret);
+      m.set('email', email);
+    }
+    catch (error) {
+      log.error(error, `Error during UserService.setModel`);
+      throw error;
+    }
+    return m;
   }
 
 }
