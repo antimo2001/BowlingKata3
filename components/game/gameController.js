@@ -1,2 +1,2 @@
-import { log } from "../../tools/log";
+import log from "./gameLogger";
 log.trace(`file found: gameController`);

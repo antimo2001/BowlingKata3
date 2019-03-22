@@ -1,7 +1,8 @@
 // import log from "../../tools/log";
 import log from "./playerLogger";
-import Player from "./playerModel";
+import PlayerModel from "./playerModel";
 log.trace(`file found: playerService`);
+const {Player} = PlayerModel;
 
 export class PlayerService {
   /**
@@ -28,9 +29,9 @@ export class PlayerService {
   static create(model) {
     log.info(`Begin PlayerService.create`);
     try {
-      // const playername = model.get('playername');
-      // const secret = model.get('secret');
-      // const email = model.get('email');
+      const playername = model.get('playername');
+      const secret = model.get('secret');
+      const email = model.get('email');
       let player = new Player({ playername, secret, email });
       return player.save()
         .then(r => {
@@ -54,7 +55,7 @@ export class PlayerService {
     try {
       log.info(Object.getOwnPropertyNames(body));
       //FIXME whats the data model for player? and its relationship to User?
-      let {name, displayname, games} = body;
+      let {} = body;
       m.set('playername', playername);
       m.set('secret', secret);
       m.set('email', email);

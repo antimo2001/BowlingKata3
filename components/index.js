@@ -2,7 +2,7 @@ import express from 'express';
 import log from '../tools/log';
 import userRoute from '../components/user/userRoute';
 import playerRoute from '../components/player/playerRoute';
-// import gameRoute from '../components/game/gameRoute';
+import gameRoute from '../components/game/gameRoute';
 
 log.trace(`file found: components/index`);
 const router = express.Router();

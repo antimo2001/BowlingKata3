@@ -126,6 +126,12 @@ const PLAYER_SEED_DATA = [
 - [x] practice mongoose (started on userModel)
 - [ ] practice seed mongodb; use csv parser
 
+## design session 2019-03-21 21:48:56
+
+- as a player, i want to add a frame's rolls to a new game
+- a player can have many saved games
+- show report of who won the game
+
 ## 2019-03-NN
 
 ## 2019-MM-DDD
