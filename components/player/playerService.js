@@ -2,6 +2,7 @@
 import log from "./playerLogger";
 import PlayerModel from "./playerModel";
 log.trace(`file found: playerService`);
+
 const {Player} = PlayerModel;
 
 export class PlayerService {
@@ -24,15 +25,14 @@ export class PlayerService {
   }
   /**
    * Creates new player in database
-   * @param {Map<string,value>} model the data to insert and create player
+   * @param {Map<string,value>} body the data to insert and create player
    */
-  static create(model) {
+  static create(body) {
     log.info(`Begin PlayerService.create`);
     try {
-      const playername = model.get('playername');
-      const secret = model.get('secret');
-      const email = model.get('email');
-      let player = new Player({ playername, secret, email });
+      const displayName = body.get('displayName');
+      // const games = body.get('games');
+      let player = new Player({ displayName });
       return player.save()
         .then(r => {
           log.info({player}, `Successful player.save()`);
@@ -54,12 +54,10 @@ export class PlayerService {
     let m = new Map();
     try {
       log.info(Object.getOwnPropertyNames(body));
-      //FIXME whats the data model for player? and its relationship to User?
-      let {} = body;
-      m.set('playername', playername);
-      m.set('secret', secret);
-      m.set('email', email);
-      log.info({playername, secret, email}, `Done setModel`);
+      let {displayName} = body;
+      m.set('displayName', displayName);
+      // m.set('games', games);
+      log.info({displayName}, `Done setModel`);
     }
     catch (error) {
       log.error(error, `Error during PlayerService.setModel`);
