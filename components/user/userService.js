@@ -1,7 +1,9 @@
 // import log from "../../tools/log";
 import log from "./userLogger";
-import User from "./userModel";
+import UserModel from "./userModel";
 log.trace(`file found: userService`);
+
+const {User} = UserModel;
 
 export class UserService {
   /**
@@ -23,14 +25,14 @@ export class UserService {
   }
   /**
    * Creates new user in database
-   * @param {Map<string,value>} model the data to insert and create user
+   * @param {Map<string,value>} body the data to insert and create user
    */
-  static create(model) {
+  static create(body) {
     log.info(`Begin UserService.create`);
     try {
-      const username = model.get('username');
-      const secret = model.get('secret');
-      const email = model.get('email');
+      const username = body.get('username');
+      const secret = body.get('secret');
+      const email = body.get('email');
       let user = new User({ username, secret, email });
       return user.save()
         .then(r => {
