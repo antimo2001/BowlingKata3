@@ -12,10 +12,7 @@ let DB;
  * @param {Object} dbconfig config for connecting; defaults to DBCONFIG
  */
 export default function dbconnect(dbconfig = DBCONFIG) {
-  if (!!DB) {
-    log.trace(`already setup mongoose database connection`);
-  }
-  else {
+  if (!DB) {
     log.trace(`connect to database via mongoose`);
     const { uri, database, options } = dbconfig;
     mongoose.connect(`${uri}/${database}`, options);
@@ -24,9 +21,12 @@ export default function dbconnect(dbconfig = DBCONFIG) {
 
     DB.on('error', console.error.bind(console, 'Connection Error:'));
 
-    DB.once('open', function () {
+    DB.once('open', function() {
       log.info(`Done connecting to database (${database})`);
     });
+  }
+  else {
+    log.trace(`already setup mongoose database connection`);
   }
 
   return DB;

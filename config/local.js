@@ -1,3 +1,4 @@
+process.env.NOCHILDLOGGER = 'disablechildloggers';
 const { PORT, NODE_ENV } = process.env;
 
 // Setup the logger config
