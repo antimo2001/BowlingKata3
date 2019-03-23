@@ -12,7 +12,7 @@ let _User;
 /**
  * Class contains static properties for the User schema and model.
  */
-export default class UserModel {
+export class UserModel {
   /**
    * This property defines the User schema.
    * @type mongoose.Schema

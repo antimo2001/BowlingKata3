@@ -13,7 +13,7 @@ let _Game;
 /**
  * Class contains static properties for the Game schema and model.
  */
-export default class GameModel {
+export class GameModel {
   /**
    * This property defines the Game schema.
    * @type mongoose.Schema

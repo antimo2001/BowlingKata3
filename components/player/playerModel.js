@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import log from "./playerLogger";
-import GameModel from "../game/gameModel";
-// import dbconnect from "../../tools/dbconnect";
+import {GameModel} from "../game/gameModel";
 
 log.trace(`file found: playerModel`);
 const MODEL_NAME = 'Player';

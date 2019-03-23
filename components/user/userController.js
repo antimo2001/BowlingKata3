@@ -1,124 +1,144 @@
-// import log from "../../tools/log";
 import log from "./userLogger";
-import {UserService} from "./userService";
-
+import { UserService } from "./userService";
+import sendOk from "../../tools/sendOk";
+import sendError from "../../tools/sendError";
 log.trace(`file found: UserController`);
+
+/** @type UserService */
+let _service;
 
 /**
  * Class contains middleware for the /users route
  */
 export class UserController {
-  
-  static resetModel(req) {
-    //Reset the model
-    req.model = new Map();
-  }
 
-  /** validate userId */
-  static validateId(req, res, next, userId) {
-    log.info(`Begin UserController.validateId`);
-    UserController.resetModel(req);
-
-    if (!userId) {
-      let e = new Error('userId is not valid; cannot continue the resource');
-      return next(Object.assign(e, { code: 500 }));
+  /** Setup the new data-service if request needs a new one */
+  static setService(req, res, next) {
+    if (!req.hasNewService) {
+      log.info(`Instantiate new UserService; attach to req`);
+      req.hasNewService = true;
+      _service = new UserService();
     }
-
-    log.info({userId}, `userId is valid`);
-
-    //Populate the model with data
-    req.model.set('id', userId);
-    // req.userId = userId;
-
     return next();
   }
 
-  /** show listing of users */
-  static list(req, res, next) {
-    log.info(`Begin UserController.list`);
+  /** Parse the given request-body */
+  static parseBody(req, res, next) {
+    if (!req.body) {
+      return next();
+    }
     try {
-      // const userId = req.model.get('id');
-      // log.info({userId}, `userId was set to`);
-
-      //Define handlers
-      const thenSend = (data) => {
-        const yes = Object.assign(data, {
-          success: true,
-          results: data
-        });
-        return res.status(200).json(yes);
+      log.info(`Begin UserController.parseBody`);
+      const { body } = req;
+      for (const p of Object.getOwnPropertyNames(body)) {
+        _service.setKeyValue(p, body[p]);
       }
-
-      //Invoke data-service with handlers
-      return UserService.list()
-        .then(thenSend)
-        .catch(error => {
-          log.error(error, `Error from UserService.list`);
-          return next(error);
-        });
+      log.info(_service._map.keys(), `_service._map.keys() are what?`);
+      return next();
     }
     catch (error) {
-      log.error(error, `Error during UserController.list`);
-      let e = Object.assign(error, { code: 500 });
-      return next(e);
+      log.error(error, `Error during UserController.parseBody`);
+      return next(sendError(error));
     }
   }
 
-  /** create new user */
+  /** Validate userId */
+  static validateId(req, res, next, userId) {
+    log.info(`Begin UserController.validateId`);
+    try {
+      if (!userId) {
+        let msg = `userId is not valid; cannot send resource`;
+        let err = new Error(msg);
+        return next(sendError(err, 500, 'invalid_id'));
+      }
+      else {
+        UserController.setService(req, res, () => {
+          log.info({ userId }, `Populate the model with valid id`);
+          _service.userId = userId;
+          return next();
+        });
+      }
+    }
+    catch (error) {
+      log.fatal(error, `Error during UserController.validateId`);
+      return next(sendError(error));
+    }
+  }
+
+  /** Show listing of users */
+  static list(req, res, next) {
+    log.info(`Begin UserController.list`);
+    try {
+      return _service.list()
+        .then(list => {
+          return res.status(200).json(sendOk(list));
+        })
+        .catch(error => {
+          log.error(error, `Error from UserService.list`);
+          return next(sendError(error));
+        });
+    }
+    catch (error) {
+      log.fatal(error, `Error during UserController.list`);
+      return next(sendError(error));
+    }
+  }
+
+  /** Create new user */
   static create(req, res, next) {
     log.info(`Begin UserController.create`);
     try {
-      // UserController.resetModel(req);
-      req.model = UserService.setModel(req.body);
-
-      //Define handlers
-      const thenSend = (data) => {
-        return res.status(200).json({
-          success: true,
-          results: data,
-          error: ''
-        });
-      }
-      //Invoke data-service with handlers
-      return UserService.create(req.model)
-        .then(thenSend)
+      return _service.create()
+        .then(rcreate => {
+          return res.status(200).json(sendOk(rcreate));
+        })
         .catch(error => {
           log.error(error, `Error from UserService.create`);
-          return next(error);
+          return next(sendError(error));
         });
     }
     catch (error) {
       log.error(error, `Error during UserController.create`);
-      let e = Object.assign(error, { code: 500 });
-      return next(e);
+      return next(sendError(error));
     }
   }
 
-  /** update existing user */
+  /** Update existing user */
   static updateOne(req, res, next) {
+    log.info(`Begin UserController.updateOne`);
     try {
-      log.info(`Begin UserController.updateOne`);
-      log.info(!!req.user, `req is truthy?`);
-      return next({ message: 'Notyetimplemented' });
+      const { body } = req;
+      return _service.updateOne(body)
+        .then(rupdate => {
+          return res.status(200).json(sendOk(rupdate));
+        })
+        .catch(error => {
+          log.error(error, `Error during UserService.updateOne`);
+          return next(sendError(error));
+        });
     }
     catch (error) {
       log.error(error, `Error during UserController.updateOne`);
-      let e = Object.assign(error, { code: 500 });
-      return next(e);
+      return next(sendError(error));
     }
   }
 
-  /** delete existing user */
+  /** Delete existing user */
   static deleteOne(req, res, next) {
+    log.info(`Begin UserController.deleteOne`);
     try {
-      log.info(`Begin UserController.deleteOne`);
-      log.info(!!req.user, `req is truthy?`);
-      return next({ message: 'Notyetimplemented' });
+      return _service.deleteOne()
+        .then(rdelete => {
+          return res.status(200).json(sendOk(rdelete));
+        })
+        .catch(error => {
+          log.error(error, `Error during UserService.deleteOne`);
+          return next(sendError(error));
+        });
     }
     catch (error) {
       log.error(error, `Error during UserController.deleteOne`);
-      let e = Object.assign(error, { code: 500 });
-      return next(e);
+      return next(sendError(error));
     }
   }
 

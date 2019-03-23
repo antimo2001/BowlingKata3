@@ -1,17 +1,31 @@
 import express from 'express';
-// import log from "../../tools/log";
+import bodyparser from 'body-parser';
 import log from "./userLogger";
-import {UserController} from "./userController";
+import { UserController as Controller } from "./userController";
 log.trace(`file found: user/userRoute`);
 
 const router = express.Router();
+const jsonparser = bodyparser.json();
 
-router.param('userId', UserController.validateId);
+router.route('/').all(Controller.setService);
 
-router.route('/list').get(UserController.list);
-router.route('/create').post(UserController.create);
+router.param('userId', Controller.validateId);
 
-router.route('/:userId').put(UserController.updateOne);
-router.route('/:userId').delete(UserController.deleteOne);
+router.route('/:userId').delete(Controller.deleteOne);
+
+router.route('/:userId').get(Controller.list);
+router.route('/').get(Controller.list);
+
+router.route('/:userId').put(
+  jsonparser,
+  Controller.parseBody,
+  Controller.updateOne
+);
+
+router.route('/').post(
+  jsonparser,
+  Controller.parseBody,
+  Controller.create
+);
 
 export default router;
