@@ -2,7 +2,6 @@ import log from "./playerLogger";
 import {PlayerService} from "./playerService";
 import sendOk from "../../tools/sendOk";
 import sendError from "../../tools/sendError";
-
 log.trace(`file found: PlayerController`);
 
 /** @type PlayerService */

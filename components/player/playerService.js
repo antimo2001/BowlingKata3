@@ -1,5 +1,5 @@
 import log from "./playerLogger";
-import PlayerModel from "./playerModel";
+import {PlayerModel} from "./playerModel";
 log.trace(`file found: playerService`);
 
 const {Player} = PlayerModel;
@@ -50,9 +50,9 @@ export class PlayerService {
   list() {
     log.info(`Begin PlayerService.list`);
     try {
-      let all = !this.playerId;
-      let q = all ? {} : {_id: this.playerId}
-      log.info({q}, `Where listing ${all ? 'all' : 'by playerId'}`);
+      let byId = !!this.playerId;
+      let q = byId ? {_id: this.playerId} : {}
+      log.info({ q }, `Where listing ${byId ? 'By playerId' : 'All'}`);
       return Player.find(q).select('-__v');
     }
     catch (error) {
@@ -68,7 +68,7 @@ export class PlayerService {
     log.info(`Begin PlayerService.create`);
     try {
       const m = this.mapo;
-      log.info(m, `Is mapo ready for save?`);
+      log.info({m}, `Is mapo ready for save?`);
       const player = new Player(m);
       return player.save()
         .then(r => {
@@ -88,7 +88,10 @@ export class PlayerService {
   updateOne() {
     log.info(`Begin PlayerService.updateOne`);
     try {
-      return User.findOneAndUpdate({_id: this.playerId}, model);
+      const uno = {_id: this.playerId};
+      const m = this.mapo;
+      log.info({ m }, `Is mapo ready for updateOne?`);
+      return Player.updateOne(uno, m, {upsert: true});
     }
     catch (error) {
       log.error(error, `Error during PlayerService.updateOne`);
@@ -102,7 +105,8 @@ export class PlayerService {
   deleteOne() {
     log.info(`Begin PlayerService.deleteOne`);
     try {
-      throw new Error(`NotYetImplemented`);
+      const uno = { _id: this.playerId };
+      return Player.deleteOne(uno);
     }
     catch (error) {
       log.error(error, `Error during PlayerService.deleteOne`);

@@ -14,7 +14,7 @@ let _Player;
 /**
  * Class contains static properties for the Player schema and model.
  */
-export default class PlayerModel {
+export class PlayerModel {
   /**
    * This property defines the Player schema.
    * @type mongoose.Schema
