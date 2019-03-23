@@ -1,14 +1,9 @@
 import pino from "pino";
+import config from "../../config";
 
-/**
- * Create special logger for the player component
- */
-let playerLogger = pino({
-  name: 'playerLogger',
-  enabled: !process.env.NOCHILDLOGGER,
-  level: process.env.LOGLEVEL || 'info',
-  timestamp: false,
-  useLevelLabels: true,
-});
+let l = pino(Object.assign(config.log, {
+  name: 'PlayerLogger',
+  enabled: config.log.child
+}));
 
-export default playerLogger;
+export default l;

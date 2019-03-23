@@ -7,6 +7,7 @@ const log = {
   level: process.env.LOGLEVEL || 'info',
   timestamp: false,
   useLevelLabels: true,
+  child: !process.env.NOCHILDLOGGER
 }
 
 //// Log Levels
