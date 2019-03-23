@@ -1,5 +1,3 @@
-const { PORT, NODE_ENV } = process.env;
-
 // process.env.NOCHILDLOGGER = 'disablechildloggers';
 
 // Setup the logger config
@@ -34,7 +32,7 @@ const mongo = {
 
 export default {
   port: 3000,
-  env: NODE_ENV === 'local' ? 'development' : 'production',
+  env: process.env.NODE_ENV === 'local' ? 'development' : 'production',
   log: log,
   mongo: mongo,
 }
