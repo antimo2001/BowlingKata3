@@ -1,12 +1,10 @@
 import mongoose from "mongoose";
 import log from "./playerLogger";
 import GameModel from "../game/gameModel";
-import dbconnect from "../../tools/dbconnect";
+// import dbconnect from "../../tools/dbconnect";
 
 log.trace(`file found: playerModel`);
 const MODEL_NAME = 'Player';
-
-dbconnect();
 
 /** @type mongoose.Schema */
 let _PlayerSchema;

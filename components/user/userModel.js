@@ -1,11 +1,8 @@
 import mongoose from "mongoose";
 import log from "./userLogger";
-import dbconnect from "../../tools/dbconnect";
 
 log.trace(`file found: userModel`);
 const MODEL_NAME = 'User';
-
-dbconnect();
 
 /** @type mongoose.Schema */
 let _UserSchema;

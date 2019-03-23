@@ -1,21 +1,22 @@
 import express from 'express';
 import log from "./playerLogger";
-import {PlayerController} from "./playerController";
+import {PlayerController as Controller} from "./playerController";
 log.trace(`file found: player/playerRoute`);
 
 const router = express.Router();
 
 router.route('/').all(
-  PlayerController.setService,
-  PlayerController.parseBody,
+  Controller.setService,
+  Controller.parseBody,
 );
 
-router.param('playerId', PlayerController.validateId);
+router.param('playerId', Controller.validateId);
 
-router.route('/:playerId').put(PlayerController.updateOne);
-router.route('/:playerId').delete(PlayerController.deleteOne);
+router.route('/:playerId').put(Controller.updateOne);
+router.route('/:playerId').delete(Controller.deleteOne);
+router.route('/:playerId').get(Controller.list);
 
-router.route('/').get(PlayerController.list);
-router.route('/').post(PlayerController.create);
+router.route('/').get(Controller.list);
+router.route('/').post(Controller.create);
 
 export default router;

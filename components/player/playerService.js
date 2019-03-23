@@ -8,9 +8,6 @@ export class PlayerService {
   constructor() {
     this._id = null;
 
-    /** @type string[] */
-    this._props = [];
-
     /** @type Map<string,any> */
     this._map = new Map();
   }
@@ -21,8 +18,7 @@ export class PlayerService {
    * @param {*} value value
    */
   setKeyValue(key, value) {
-    log.info(`Begin PlayerService.setModel(${key}, ${value})`);
-    this._props.push(key);
+    log.trace(`Begin PlayerService.setModel(${key}, ${value})`);
     this._map.set(key, value);
   }
 
@@ -37,32 +33,27 @@ export class PlayerService {
   }
 
   /**
-   * Get the hashmap of this player as an Object
+   * Convert this hashmap of player to Object
    * @readonly
    */
   get mapo() {
     let mo = {}
-    for (const p of this._props) {
-      mo[p] = this._map.get(p);
+    for (const [p, v] of this._map.entries()) {
+      mo[p] = v;
     }
     return mo;
   }
 
   /**
-   * Fetches list of players
+   * Fetch listing of players
    */
   list() {
     log.info(`Begin PlayerService.list`);
     try {
-      let playerId = this._map.get('id');
-      if (!playerId) {
-        log.info(`Fetch all players`);
-        return Player.find();
-      }
-      else {
-        log.info({playerId}, `Fetch one player`);
-        return Player.find({_id: playerId});
-      }
+      let all = !this.playerId;
+      let q = all ? {} : {_id: this.playerId}
+      log.info({q}, `Where listing ${all ? 'all' : 'by playerId'}`);
+      return Player.find(q).select('-__v');
     }
     catch (error) {
       log.error(error, `Error during PlayerService.list`);
@@ -71,17 +62,17 @@ export class PlayerService {
   }
 
   /**
-   * Creates new player in database
+   * Create new player in database
    */
   create() {
     log.info(`Begin PlayerService.create`);
     try {
-      let m = this.mapo;
-      log.info(m, `this.mapo looks ready for player.save?`);
-      let player = new Player(m);
+      const m = this.mapo;
+      log.info(m, `Is mapo ready for save?`);
+      const player = new Player(m);
       return player.save()
         .then(r => {
-          log.info({player}, `Successful player.save()`);
+          log.info({r}, `Successful player.save()`);
           return r;
         });
     }
@@ -94,11 +85,10 @@ export class PlayerService {
   /**
    * Update existing player
    */
-  updateOne(body) {
+  updateOne() {
     log.info(`Begin PlayerService.updateOne`);
     try {
-      const playerId = this._map.get('id');
-      return User.findOneAndUpdate()
+      return User.findOneAndUpdate({_id: this.playerId}, model);
     }
     catch (error) {
       log.error(error, `Error during PlayerService.updateOne`);

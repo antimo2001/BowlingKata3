@@ -15,18 +15,12 @@ export class PlayerController {
 
   /** Setup the new data-service if request needs a new one */
   static setService(req, res, next) {
-    try {
-      if (!req.hasNewService) {
-        log.info(`Instantiate new PlayerService; attach to req`);
-        req.hasNewService = true;
-        _service = new PlayerService();
-      }
-      return next();
+    if (!req.hasNewService) {
+      log.info(`Instantiate new PlayerService; attach to req`);
+      req.hasNewService = true;
+      _service = new PlayerService();
     }
-    catch (error) {
-      log.error(error, `Error during PlayerController.setService`);
-      return next(sendError(error));
-    }
+    return next();
   }
 
   /** Parse the given request-body */
@@ -40,7 +34,7 @@ export class PlayerController {
       for (const p of Object.getOwnPropertyNames(body)) {
         _service.setKeyValue(p, body[p]);
       }
-      log.info(_service._props, `_service.props?`);
+      log.info(_service._map.keys(), `_service._map.keys() are what?`);
       return next();
     }
     catch (error) {
@@ -58,13 +52,16 @@ export class PlayerController {
         let err = new Error(msg);
         return next(sendError(err, 500, 'invalid_id'));
       }
-
-      log.info({ playerId }, `Populate the model with valid id`);
-      _service.playerId = playerId;
-      return next();
+      else {
+        PlayerController.setService(req, res, () => {
+          log.info({ playerId }, `Populate the model with valid id`);
+          _service.playerId = playerId;
+          return next();
+        });
+      }
     }
     catch (error) {
-      log.error(error, `Error during PlayerController.validateId`);
+      log.fatal(error, `Error during PlayerController.validateId`);
       return next(sendError(error));
     }
   }
@@ -83,7 +80,7 @@ export class PlayerController {
         });
     }
     catch (error) {
-      log.error(error, `Error during PlayerController.list`);
+      log.fatal(error, `Error during PlayerController.list`);
       return next(sendError(error));
     }
   }
