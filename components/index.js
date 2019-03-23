@@ -12,6 +12,6 @@ router.get('/api-status', sendOk);
 
 router.use('/users', userRoute);
 router.use('/players', playerRoute);
-// router.use('/games', gameRoute);
+router.use('/games', gameRoute);
 
 export default router;
