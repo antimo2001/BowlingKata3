@@ -1,5 +1,6 @@
-process.env.NOCHILDLOGGER = 'disablechildloggers';
 const { PORT, NODE_ENV } = process.env;
+
+// process.env.NOCHILDLOGGER = 'disablechildloggers';
 
 // Setup the logger config
 const log = {
@@ -9,6 +10,15 @@ const log = {
   timestamp: false,
   useLevelLabels: true,
 }
+
+//// Log Levels
+//// off	100("silent")
+//// fatal	60
+//// error	50
+//// warn	40
+//// info	30
+//// debug	20
+//// trace	10
 
 // Setup the mongodb config
 const mongo = {
