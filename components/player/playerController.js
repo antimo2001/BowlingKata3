@@ -1,124 +1,148 @@
-// import log from "../../tools/log";
 import log from "./playerLogger";
 import {PlayerService} from "./playerService";
+import sendOk from "../../tools/sendOk";
+import sendError from "../../tools/sendError";
 
 log.trace(`file found: PlayerController`);
+
+/** @type PlayerService */
+let _service;
 
 /**
  * Class contains middleware for the /players route
  */
 export class PlayerController {
-  
-  static resetModel(req) {
-    //Reset the model
-    req.model = new Map();
+
+  /** Setup the new data-service if request needs a new one */
+  static setService(req, res, next) {
+    try {
+      if (!req.hasNewService) {
+        log.info(`Instantiate new PlayerService; attach to req`);
+        req.hasNewService = true;
+        _service = new PlayerService();
+      }
+      return next();
+    }
+    catch (error) {
+      log.error(error, `Error during PlayerController.setService`);
+      return next(sendError(error));
+    }
   }
 
-  /** validate playerId */
+  /** Parse the given request-body */
+  static parseBody(req, res, next) {
+    if (!req.body) {
+      return next();
+    }
+    try {
+      log.info(`Begin PlayerController.parseBody`);
+      const {body} = req;
+      for (const p of Object.getOwnPropertyNames(body)) {
+        _service.setKeyValue(p, body[p]);
+      }
+      log.info(_service._props, `_service.props?`);
+      return next();
+    }
+    catch (error) {
+      log.error(error, `Error during PlayerController.parseBody`);
+      return next(sendError(error));
+    }
+  }
+
+  /** Validate playerId */
   static validateId(req, res, next, playerId) {
     log.info(`Begin PlayerController.validateId`);
-    PlayerController.resetModel(req);
+    try {
+      if (!playerId) {
+        let msg = `playerId is not valid; cannot send resource`;
+        let err = new Error(msg);
+        return next(sendError(err, 500, 'invalid_id'));
+      }
 
-    if (!playerId) {
-      let e = new Error('playerId is not valid; cannot continue the resource');
-      return next(Object.assign(e, { code: 500 }));
+      log.info({ playerId }, `Populate the model with valid id`);
+      _service.playerId = playerId;
+      return next();
     }
-
-    log.info({playerId}, `playerId is valid`);
-
-    //Populate the model with data
-    req.model.set('id', playerId);
-    // req.playerId = playerId;
-
-    return next();
+    catch (error) {
+      log.error(error, `Error during PlayerController.validateId`);
+      return next(sendError(error));
+    }
   }
 
-  /** show listing of players */
+  /** Show listing of players */
   static list(req, res, next) {
     log.info(`Begin PlayerController.list`);
     try {
-      // const playerId = req.model.get('id');
-      // log.info({playerId}, `playerId was set to`);
-
-      //Define handlers
-      const thenSend = (data) => {
-        const yes = Object.assign(data, {
-          success: true,
-          results: data
-        });
-        return res.status(200).json(yes);
-      }
-
-      //Invoke data-service with handlers
-      return PlayerService.list()
-        .then(thenSend)
+      return _service.list()
+        .then(list => {
+          return res.status(200).json(sendOk(list));
+        })
         .catch(error => {
           log.error(error, `Error from PlayerService.list`);
-          return next(error);
+          return next(sendError(error));
         });
     }
     catch (error) {
       log.error(error, `Error during PlayerController.list`);
-      let e = Object.assign(error, { code: 500 });
-      return next(e);
+      return next(sendError(error));
     }
   }
 
-  /** create new player */
+  /** Create new player */
   static create(req, res, next) {
     log.info(`Begin PlayerController.create`);
     try {
-      // PlayerController.resetModel(req);
-      req.model = PlayerService.setModel(req.body);
-
-      //Define handlers
-      const thenSend = (data) => {
-        return res.status(200).json({
-          success: true,
-          results: data,
-          error: ''
-        });
-      }
-      //Invoke data-service with handlers
-      return PlayerService.create(req.model)
-        .then(thenSend)
+      return _service.create()
+        .then(rcreate => {
+          return res.status(200).json(sendOk(rcreate));
+        })
         .catch(error => {
           log.error(error, `Error from PlayerService.create`);
-          return next(error);
+          return next(sendError(error));
         });
     }
     catch (error) {
       log.error(error, `Error during PlayerController.create`);
-      let e = Object.assign(error, { code: 500 });
-      return next(e);
+      return next(sendError(error));
     }
   }
 
-  /** update existing player */
+  /** Update existing player */
   static updateOne(req, res, next) {
+    log.info(`Begin PlayerController.updateOne`);
     try {
-      log.info(`Begin PlayerController.updateOne`);
-      log.info(!!req.player, `req is truthy?`);
-      return next({ message: 'Notyetimplemented' });
+      const { body } = req;
+      return _service.updateOne(body)
+        .then(rupdate => {
+          return res.status(200).json(sendOk(rupdate));
+        })
+        .catch(error => {
+          log.error(error, `Error during PlayerService.updateOne`);
+          return next(sendError(error));
+        });
     }
     catch (error) {
       log.error(error, `Error during PlayerController.updateOne`);
-      let e = Object.assign(error, { code: 500 });
-      return next(e);
+      return next(sendError(error));
     }
   }
 
-  /** delete existing player */
+  /** Delete existing player */
   static deleteOne(req, res, next) {
+    log.info(`Begin PlayerController.deleteOne`);
     try {
-      log.info(`Begin PlayerController.deleteOne`);
-      log.info(!!req.player, `req is truthy?`);
-      return next({ message: 'Notyetimplemented' });
+      return _service.deleteOne()
+        .then(rdelete => {
+          return res.status(200).json(sendOk(rdelete));
+        })
+        .catch(error => {
+          log.error(error, `Error during PlayerService.deleteOne`);
+          return next(sendError(error));
+        });
     }
     catch (error) {
       log.error(error, `Error during PlayerController.deleteOne`);
-      let e = Object.assign(error, { code: 500 });
-      return next(e);
+      return next(sendError(error));
     }
   }
 

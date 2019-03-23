@@ -1,4 +1,3 @@
-// import log from "../../tools/log";
 import log from "./playerLogger";
 import PlayerModel from "./playerModel";
 log.trace(`file found: playerService`);
@@ -6,33 +5,80 @@ log.trace(`file found: playerService`);
 const {Player} = PlayerModel;
 
 export class PlayerService {
+  constructor() {
+    this._id = null;
+
+    /** @type string[] */
+    this._props = [];
+
+    /** @type Map<string,any> */
+    this._map = new Map();
+  }
+
+  /**
+   * Set a key,value for this player
+   * @param {String} key hashmap key
+   * @param {*} value value
+   */
+  setKeyValue(key, value) {
+    log.info(`Begin PlayerService.setModel(${key}, ${value})`);
+    this._props.push(key);
+    this._map.set(key, value);
+  }
+
+  /**
+   * This property gets or sets the playerId
+   */
+  get playerId() {
+    return this._id;
+  }
+  set playerId(value) {
+    this._id = value;
+  }
+
+  /**
+   * Get the hashmap of this player as an Object
+   * @readonly
+   */
+  get mapo() {
+    let mo = {}
+    for (const p of this._props) {
+      mo[p] = this._map.get(p);
+    }
+    return mo;
+  }
+
   /**
    * Fetches list of players
-   * @param {hexstring} playerId the playerId to use to fetch player data
-   * @returns Promise<Player[]>
    */
-  static list(playerId = null) {
-    log.info({playerId}, `Begin PlayerService.list`);
-    
-    if (!playerId) {
-      log.info(`Fetch all players`);
-      return Player.find();
+  list() {
+    log.info(`Begin PlayerService.list`);
+    try {
+      let playerId = this._map.get('id');
+      if (!playerId) {
+        log.info(`Fetch all players`);
+        return Player.find();
+      }
+      else {
+        log.info({playerId}, `Fetch one player`);
+        return Player.find({_id: playerId});
+      }
     }
-    else {
-      log.info({playerId}, `Fetch one player`);
-      return Player.find({_id: playerId});
+    catch (error) {
+      log.error(error, `Error during PlayerService.list`);
+      throw error;
     }
   }
+
   /**
    * Creates new player in database
-   * @param {Map<string,value>} body the data to insert and create player
    */
-  static create(body) {
+  create() {
     log.info(`Begin PlayerService.create`);
     try {
-      const displayName = body.get('displayName');
-      // const games = body.get('games');
-      let player = new Player({ displayName });
+      let m = this.mapo;
+      log.info(m, `this.mapo looks ready for player.save?`);
+      let player = new Player(m);
       return player.save()
         .then(r => {
           log.info({player}, `Successful player.save()`);
@@ -44,26 +90,34 @@ export class PlayerService {
       throw error;
     }
   }
+
   /**
-   * Create hashmap given the request-body
-   * @param {any} body expressjs-request-body
-   * @returns Map<string, any>
+   * Update existing player
    */
-  static setModel(body) {
-    log.info(`Begin PlayerService.setModel`);
-    let m = new Map();
+  updateOne(body) {
+    log.info(`Begin PlayerService.updateOne`);
     try {
-      log.info(Object.getOwnPropertyNames(body));
-      let {displayName} = body;
-      m.set('displayName', displayName);
-      // m.set('games', games);
-      log.info({displayName}, `Done setModel`);
+      const playerId = this._map.get('id');
+      return User.findOneAndUpdate()
     }
     catch (error) {
-      log.error(error, `Error during PlayerService.setModel`);
+      log.error(error, `Error during PlayerService.updateOne`);
       throw error;
     }
-    return m;
+  }
+
+  /**
+   * Delete existing player
+   */
+  deleteOne() {
+    log.info(`Begin PlayerService.deleteOne`);
+    try {
+      throw new Error(`NotYetImplemented`);
+    }
+    catch (error) {
+      log.error(error, `Error during PlayerService.deleteOne`);
+      throw error;
+    }
   }
 
 }
