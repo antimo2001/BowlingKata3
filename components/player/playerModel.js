@@ -8,12 +8,10 @@ const MODEL_NAME = 'Player';
 
 dbconnect();
 
-const g = {
-  /** @type mongoose.Schema */
-  PlayerSchema: null,
-  /** @type mongoose.model */
-  Player: null
-}
+/** @type mongoose.Schema */
+let _PlayerSchema;
+/** @type mongoose.model */
+let _Player;
 
 /**
  * Class contains static properties for the Player schema and model.
@@ -25,10 +23,10 @@ export default class PlayerModel {
    * @readonly
    */
   static get PlayerSchema() {
-    if (!g.PlayerSchema) {
+    if (!_PlayerSchema) {
       log.info(`Define the schema for ${MODEL_NAME}`);
       let {GameSchema} = GameModel;
-      g.PlayerSchema = new mongoose.Schema({
+      _PlayerSchema = new mongoose.Schema({
         displayName: String,
         games: [GameSchema],
         dateCreated: { type: Date, default: Date.now },
@@ -36,7 +34,7 @@ export default class PlayerModel {
       });
     }
 
-    return g.PlayerSchema;
+    return _PlayerSchema;
   }
 
   /**
@@ -45,13 +43,13 @@ export default class PlayerModel {
    * @readonly
    */
   static get Player() {
-    if (!g.Player) {
+    if (!_Player) {
       log.info(`Define the model for ${MODEL_NAME}`);
       let s = PlayerModel.PlayerSchema;
-      g.Player = mongoose.model(MODEL_NAME, s);
+      _Player = mongoose.model(MODEL_NAME, s);
     }
 
-    return g.Player;
+    return _Player;
   }
 
 }

@@ -7,12 +7,10 @@ const MODEL_NAME = 'Game';
 
 dbconnect();
 
-const g = {
-  /** @type mongoose.Schema */
-  GameSchema: null,
-  /** @type mongoose.model */
-  Game: null
-}
+/** @type mongoose.Schema */
+let _GameSchema;
+/** @type mongoose.model */
+let _Game;
 
 /**
  * Class contains static properties for the Game schema and model.
@@ -24,16 +22,16 @@ export default class GameModel {
    * @readonly
    */
   static get GameSchema() {
-    if (!g.GameSchema) {
+    if (!_GameSchema) {
       log.info(`Define the schema for ${MODEL_NAME}`);
-      g.GameSchema = new mongoose.Schema({
+      _GameSchema = new mongoose.Schema({
         scores: [Number],
         dateCreated: { type: Date, default: Date.now },
         dateUpdated: { type: Date, default: Date.now }
       });
     }
 
-    return g.GameSchema;
+    return _GameSchema;
   }
 
   /**
@@ -42,13 +40,13 @@ export default class GameModel {
    * @readonly
    */
   static get Game() {
-    if (!g.Game) {
+    if (!_Game) {
       log.info(`Define the model for ${MODEL_NAME}`);
       let s = GameModel.GameSchema;
-      g.Game = mongoose.model(MODEL_NAME, s);
+      _Game = mongoose.model(MODEL_NAME, s);
     }
 
-    return g.Game;
+    return _Game;
   }
 
 }

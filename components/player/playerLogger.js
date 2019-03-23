@@ -5,7 +5,7 @@ import pino from "pino";
  */
 let playerLogger = pino({
   name: 'playerLogger',
-  enabled: true,
+  enabled: !process.env.NOCHILDLOGGER,
   level: process.env.LOGLEVEL || 'info',
   timestamp: false,
   useLevelLabels: true,

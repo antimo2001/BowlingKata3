@@ -7,12 +7,10 @@ const MODEL_NAME = 'User';
 
 dbconnect();
 
-const g = {
-  /** @type mongoose.Schema */
-  UserSchema: null,
-  /** @type mongoose.model */
-  User: null
-}
+/** @type mongoose.Schema */
+let _UserSchema;
+/** @type mongoose.model */
+let _User;
 
 /**
  * Class contains static properties for the User schema and model.
@@ -24,9 +22,9 @@ export default class UserModel {
    * @readonly
    */
   static get UserSchema() {
-    if (!g.UserSchema) {
+    if (!_UserSchema) {
       log.info(`Define the schema for ${MODEL_NAME}`);
-      g.UserSchema = new mongoose.Schema({
+      _UserSchema = new mongoose.Schema({
         username: String,
         secret: String,
         email: String,
@@ -35,7 +33,7 @@ export default class UserModel {
       });
     }
 
-    return g.UserSchema;
+    return _UserSchema;
   }
 
   /**
@@ -44,13 +42,13 @@ export default class UserModel {
    * @readonly
    */
   static get User() {
-    if (!g.User) {
+    if (!_User) {
       log.info(`Define the model for ${MODEL_NAME}`);
       let s = UserModel.UserSchema;
-      g.User = mongoose.model(MODEL_NAME, s);
+      _User = mongoose.model(MODEL_NAME, s);
     }
 
-    return g.User;
+    return _User;
   }
 
 }
