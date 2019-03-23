@@ -10,23 +10,17 @@ let DB;
 /**
  * Setup mongoose's database connection. Mongoose only needs to connect once.
  * @param {Object} dbconfig config for connecting; defaults to DBCONFIG
+ * @returns mongoose.connection
  */
 export default function dbconnect(dbconfig = DBCONFIG) {
   if (!DB) {
-    log.trace(`connect to database via mongoose`);
+    log.info(`Setup mongoose's database connection`);
     const { uri, database, options } = dbconfig;
     mongoose.connect(`${uri}/${database}`, options);
-
     DB = mongoose.connection;
-
-    DB.on('error', console.error.bind(console, 'Connection Error:'));
-
-    DB.once('open', function() {
-      log.info(`Done connecting to database (${database})`);
-    });
   }
   else {
-    log.trace(`already setup mongoose database connection`);
+    log.trace(`Already setup mongoose database connection`);
   }
 
   return DB;
