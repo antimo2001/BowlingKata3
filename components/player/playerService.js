@@ -7,19 +7,6 @@ const {Player} = PlayerModel;
 export class PlayerService {
   constructor() {
     this._id = null;
-
-    /** @type Map<string,any> */
-    this._map = new Map();
-  }
-
-  /**
-   * Set a key,value for this player
-   * @param {String} key hashmap key
-   * @param {*} value value
-   */
-  setKeyValue(key, value) {
-    log.trace(`Begin PlayerService.setModel(${key}, ${value})`);
-    this._map.set(key, value);
   }
 
   /**
@@ -30,18 +17,6 @@ export class PlayerService {
   }
   set playerId(value) {
     this._id = value;
-  }
-
-  /**
-   * Convert this hashmap of player to Object
-   * @readonly
-   */
-  get mapo() {
-    let mo = {}
-    for (const [p, v] of this._map.entries()) {
-      mo[p] = v;
-    }
-    return mo;
   }
 
   /**
@@ -63,13 +38,14 @@ export class PlayerService {
 
   /**
    * Create new player in database
+   * @param {Map} jsonMap express-request body converted to a hashmap
    */
-  create() {
+  create(jsonMap) {
     log.info(`Begin PlayerService.create`);
     try {
-      const m = this.mapo;
-      log.info({m}, `Is mapo ready for save?`);
-      const player = new Player(m);
+      const mapo = jsonMap.toObject();
+      log.info({mapo}, `Is mapo ready for save?`);
+      const player = new Player(mapo);
       return player.save()
         .then(r => {
           log.info({r}, `Successful player.save()`);
@@ -84,14 +60,15 @@ export class PlayerService {
 
   /**
    * Update existing player
+   * @param {Map} jsonMap express-request body converted to a hashmap
    */
-  updateOne() {
+  updateOne(jsonMap) {
     log.info(`Begin PlayerService.updateOne`);
     try {
       const uno = {_id: this.playerId};
-      const m = this.mapo;
-      log.info({ m }, `Is mapo ready for updateOne?`);
-      return Player.updateOne(uno, m, {upsert: true});
+      const mapo = jsonMap.toObject();
+      log.info({ mapo }, `Is mapo ready for updateOne?`);
+      return Player.updateOne(uno, mapo, {upsert: true});
     }
     catch (error) {
       log.error(error, `Error during PlayerService.updateOne`);

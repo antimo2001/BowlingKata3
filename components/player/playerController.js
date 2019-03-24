@@ -22,26 +22,6 @@ export class PlayerController {
     return next();
   }
 
-  /** Parse the given request-body */
-  static parseBody(req, res, next) {
-    if (!req.body) {
-      return next();
-    }
-    try {
-      log.info(`Begin PlayerController.parseBody`);
-      const {body} = req;
-      for (const p of Object.getOwnPropertyNames(body)) {
-        _service.setKeyValue(p, body[p]);
-      }
-      log.info(_service._map.keys(), `_service._map.keys() are what?`);
-      return next();
-    }
-    catch (error) {
-      log.error(error, `Error during PlayerController.parseBody`);
-      return next(sendError(error));
-    }
-  }
-
   /** Validate playerId */
   static validateId(req, res, next, playerId) {
     log.info(`Begin PlayerController.validateId`);
@@ -88,7 +68,8 @@ export class PlayerController {
   static create(req, res, next) {
     log.info(`Begin PlayerController.create`);
     try {
-      return _service.create()
+      const { jsonMap } = req;
+      return _service.create(jsonMap)
         .then(rcreate => {
           return res.status(200).json(sendOk(rcreate));
         })
@@ -107,8 +88,8 @@ export class PlayerController {
   static updateOne(req, res, next) {
     log.info(`Begin PlayerController.updateOne`);
     try {
-      const { body } = req;
-      return _service.updateOne(body)
+      const { jsonMap } = req;
+      return _service.updateOne(jsonMap)
         .then(rupdate => {
           return res.status(200).json(sendOk(rupdate));
         })

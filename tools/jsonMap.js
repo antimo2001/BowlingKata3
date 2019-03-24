@@ -5,7 +5,7 @@ const JSON_OPTIONS = {}
 
 const PINO_OPTIONS = {
   name: 'jsonMap',
-  enabled: true,
+  enabled: false,
   level: 'fatal',
   // timestamp: false,
   // useLevelLabels: true

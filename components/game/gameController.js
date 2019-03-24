@@ -22,26 +22,6 @@ export class GameController {
     return next();
   }
 
-  /** Parse the given request-body */
-  static parseBody(req, res, next) {
-    if (!req.body) {
-      return next();
-    }
-    try {
-      log.info(`Begin GameController.parseBody`);
-      const { body } = req;
-      for (const p of Object.getOwnPropertyNames(body)) {
-        _service.setKeyValue(p, body[p]);
-      }
-      log.info(_service._map.keys(), `_service._map.keys() are what?`);
-      return next();
-    }
-    catch (error) {
-      log.error(error, `Error during GameController.parseBody`);
-      return next(sendError(error));
-    }
-  }
-
   /** Validate gameId */
   static validateId(req, res, next, gameId) {
     log.info(`Begin GameController.validateId`);
@@ -88,7 +68,8 @@ export class GameController {
   static create(req, res, next) {
     log.info(`Begin GameController.create`);
     try {
-      return _service.create()
+      const { jsonMap } = req;
+      return _service.create(jsonMap)
         .then(rcreate => {
           return res.status(200).json(sendOk(rcreate));
         })
@@ -107,8 +88,8 @@ export class GameController {
   static updateOne(req, res, next) {
     log.info(`Begin GameController.updateOne`);
     try {
-      const { body } = req;
-      return _service.updateOne(body)
+      const { jsonMap } = req;
+      return _service.updateOne(jsonMap)
         .then(rupdate => {
           return res.status(200).json(sendOk(rupdate));
         })

@@ -23,8 +23,8 @@ export class CoreModel {
       log.info(`Define the schema for ${MODEL_NAME}`);
       _CoreSchema = new mongoose.Schema({
         corename: String,
-        secret: String,
-        email: String,
+        corecode: Number,
+        coreemail: String,
         dateCreated: { type: Date, default: Date.now },
         dateUpdated: { type: Date, default: Date.now }
       });
