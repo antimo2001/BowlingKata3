@@ -43,6 +43,7 @@
     "test-local1": "SET NODE_ENV=local&& gulp build && node dist/index",
     "test-prac1": "gulp build && node dist/tests/prac1_promisemap/index",
     "test-prac2": "gulp build && node dist/tests/prac2_Objects/index",
+    "test-prac3": "gulp build && node dist/tests/prac2_Objects/shiftunshift",
     "prestart": "npm install && gulp build",
     "start": "node dist/index",
     "prebuild": "npm ci",
