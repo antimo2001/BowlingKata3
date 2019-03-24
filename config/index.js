@@ -9,6 +9,9 @@ switch (NODE_ENV) {
   case 'local':
     config = local;
     break;
+  case 'test':
+    config = local;
+    break;
   case 'production':
     config = production;
     break;
@@ -18,7 +21,6 @@ switch (NODE_ENV) {
     break;
 }
 
-// console.log(`config/index: config.log.enabled===${config.log.enabled}`);
 config = Object.freeze(config);
 
 export default config;
