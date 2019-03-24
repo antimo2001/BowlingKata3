@@ -7,19 +7,6 @@ const { User } = UserModel;
 export class UserService {
   constructor() {
     this._id = null;
-
-    /** @type Map<string,any> */
-    this._map = new Map();
-  }
-
-  /**
-   * Set a key,value for this user
-   * @param {String} key hashmap key
-   * @param {*} value value
-   */
-  setKeyValue(key, value) {
-    log.trace(`Begin UserService.setModel(${key}, ${value})`);
-    this._map.set(key, value);
   }
 
   /**
@@ -30,18 +17,6 @@ export class UserService {
   }
   set userId(value) {
     this._id = value;
-  }
-
-  /**
-   * Convert this hashmap of user to Object
-   * @readonly
-   */
-  get mapo() {
-    let mo = {}
-    for (const [p, v] of this._map.entries()) {
-      mo[p] = v;
-    }
-    return mo;
   }
 
   /**
@@ -63,13 +38,14 @@ export class UserService {
 
   /**
    * Create new user in database
+   * @param {Map} jsonMap express-request body converted to a hashmap
    */
-  create() {
+  create(jsonMap) {
     log.info(`Begin UserService.create`);
     try {
-      const m = this.mapo;
-      log.info({ m }, `Is mapo ready for save?`);
-      const user = new User(m);
+      const mapo = jsonMap.toObject();
+      log.info({ mapo }, `Is mapo ready for save?`);
+      const user = new User(mapo);
       return user.save()
         .then(r => {
           log.info({ r }, `Successful user.save()`);
@@ -84,14 +60,15 @@ export class UserService {
 
   /**
    * Update existing user
+   * @param {Map} jsonMap express-request body converted to a hashmap
    */
-  updateOne() {
+  updateOne(jsonMap) {
     log.info(`Begin UserService.updateOne`);
     try {
       const uno = { _id: this.userId };
-      const m = this.mapo;
-      log.info({ m }, `Is mapo ready for updateOne?`);
-      return User.updateOne(uno, m, { upsert: true });
+      const mapo = jsonMap.toObject();
+      log.info({ mapo }, `Is mapo ready for updateOne?`);
+      return User.updateOne(uno, mapo, { upsert: true });
     }
     catch (error) {
       log.error(error, `Error during UserService.updateOne`);

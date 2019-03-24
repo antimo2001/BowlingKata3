@@ -1,4 +1,4 @@
-process.env.NOCHILDLOGGER = 'off';
+// process.env.NOCHILDLOGGER = 'off';
 
 // Setup the logger config
 const log = {

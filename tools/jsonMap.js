@@ -11,7 +11,10 @@ const PINO_OPTIONS = {
   // useLevelLabels: true
 }
 
-/** @type pino.BaseLogger */
+/**
+ * This middleware's internal logger.
+ * @type pino.BaseLogger
+ */
 let _log;
 
 function _makeMap(err, req, res, next) {
@@ -46,9 +49,19 @@ function _makeMap(err, req, res, next) {
 }
 
 /**
- * Middleware to convert request body to a hashmap. Attaches as req.jsonMap.
- * Depends on bodyparser, pino.
- *
+ * Convert entires of this map to a plain-old Json object.
+ */
+Map.prototype.toObject = function () {
+  let mapo = {}
+  for (const [p, v] of this.entries()) {
+    mapo[p] = v;
+  }
+  return mapo;
+}
+
+/**
+ * Middleware to parse the request body to a hashmap. Attaches this hashmap to
+ * the request as `req.jsonMap`. Depends on bodyparser and pino.
  * @param {*} options options to setup this middleware's bodyparser.json
  * @param {*} pinoOptions options to send to this middleware's internal logger
  * @returns Map<string,value>() as req.jsonMap
