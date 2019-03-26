@@ -6,7 +6,9 @@ import pinologger from "express-pino-logger";
 /**
  * Small express app for practicing middlewares in isolation
  */
+import coreRouter from "./coreRoute";
 import jsonMap from "../../tools/jsonMap";
+import dbconnect from '../../tools/dbconnect';
 
 ///////////////////////////////////////////////////////////////////////////////
 // #region Config
@@ -14,7 +16,7 @@ const config = {
   port: 3010,
   env: 'development',
   log: {
-    name: 'practice0',
+    name: 'practice0_express',
     enabled: true,
     level: process.env.LOGLEVEL || 'debug',
     timestamp: false,
@@ -30,6 +32,16 @@ const config = {
       useLevelLabels: true
     }
   ]
+}
+
+const dbconfig = {
+  connect: {
+    uri: 'mongodb://localhost:27017',
+    database: 'practice0_express',
+    options: {
+      useNewUrlParser: true
+    }
+  }
 }
 
 // #endregion Config
@@ -53,6 +65,14 @@ app.use(pinologger(config.log));
 // #endregion Express setup
 
 // app.use('/api', components);
+
+////////////////////////////////////////////////////////////////////////////////
+// #region coreRouter
+app.use('/api/cores', coreRouter);
+// #endregion coreRouter
+
+////////////////////////////////////////////////////////////////////////////////
+// #region /debugjsonmap
 // app.use('/', jsonMap(...config.jsonMap));
 app.use('/', jsonMap());
 app.post('/debugjsonmap', (req, res, next) => {
@@ -84,6 +104,8 @@ app.get('/', (req, res, next) => {
     }
   });
 });
+// #endregion /debugjsonmap
+
 ///////////////////////////////////////////////////////////////////////////////
 // #region Express error handlers
 
@@ -106,8 +128,22 @@ app.use((err, req, res, next) => {
 
 module.exports = app;
 
-app.listen(config.port, () => {
-  const {port,env} = config
-  console.log(`API server started: ${port}, ${env}`)
-});
+///////////////////////////////////////////////////////////////////////////////
+// #region Connect to mongoose; then start server
+function listen() {
+  app.listen(config.port, () => {
+    const {port,env} = config
+    console.log(`API server started: ${port}, ${env}`)
+  });
+}
 
+function connect() {
+  // Connect mongoose; then start API server
+  dbconnect(dbconfig.connect)
+    .on('error', console.error)
+    .on('disconnected', connect)
+    .once('open', listen);
+}
+
+connect();
+// #endregion Connect to mongoose; then start server
