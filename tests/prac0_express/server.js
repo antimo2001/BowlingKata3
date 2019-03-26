@@ -64,10 +64,10 @@ app.use(pinologger(config.log));
 
 // #endregion Express setup
 
-// app.use('/api', components);
 
 ////////////////////////////////////////////////////////////////////////////////
 // #region coreRouter
+// app.use('/api', components);
 app.use('/api/cores', coreRouter);
 // #endregion coreRouter
 
