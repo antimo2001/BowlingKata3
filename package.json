@@ -8,7 +8,7 @@
     "test": "tests"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.2.5",
+    "@babel/polyfill": "^7.4.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "express": "^4.16.4",
@@ -45,6 +45,7 @@
     "test-prac1": "gulp build && node dist/tests/prac1_promisemap/index",
     "test-prac2": "gulp build && node dist/tests/prac2_Objects/index",
     "test-prac3": "gulp build && node dist/tests/prac2_Objects/shiftunshift",
+    "test-prac4": "gulp build && node dist/tests/prac3_babel_async/index",
     "prestart": "npm install && gulp build",
     "start": "node dist/index",
     "prebuild": "npm ci",
