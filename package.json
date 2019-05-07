@@ -41,6 +41,7 @@
     "clean": "rm -rf dist",
     "test": "npm run test-prac1",
     "test-local1": "SET NODE_ENV=local&& gulp build && node dist/index",
+    "test-local2": "export NODE_ENV=local&& gulp build && node dist/index",
     "test-prac0": "gulp build && node dist/tests/prac0_express/server",
     "test-prac1": "gulp build && node dist/tests/prac1_promisemap/index",
     "test-prac2": "gulp build && node dist/tests/prac2_Objects/index",
