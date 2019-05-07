@@ -9,6 +9,22 @@ class Practice1 {
     return new Promise(resolve => setTimeout(resolve, delay));
   }
 
+  /**
+   * Delay some async operation and invoke a rejected Promise. Uses the given
+   * value as the rejected-value.
+   * @param errorFlag flag to force rejected value; defaults to true
+   * @param delay amount of time in milliseconds to delay; defaults to 3000
+   */
+  static stallAndReject(value, errorFlag = true, delay = 3000) {
+    return new Promise((resolve, reject) => {
+      if (errorFlag) {
+        setTimeout(() => reject(value), delay)
+      } else {
+        setTimeout(resolve, delay);
+      }
+    })
+  }
+
   static doBlockchain() {
     return Practice1.stall(3999)
       .then(() => 'done doBlockchainOperation');
