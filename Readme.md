@@ -31,3 +31,7 @@ In September 2016, GitHub introduced a new way to [merge pull requests](https://
 - Follow the steps outlined in this github [blog post](https://github.blog/2016-04-01-squash-your-commits/)
 
 > When you select the new “Rebase and merge” option, the commits from the pull request’s branch are rebased on to the tip of the base branch, and then the base branch itself is fast forwarded  to this newly rebased head. Rebases automatically set the committer of the rebased commits to the current user, while keeping authorship information intact. The pull request’s branch will not be modified by this operation.
+
+### Other good info found on Atlassian [blog post](https://www.atlassian.com/git/tutorials/merging-vs-rebasing)
+
+> Eliminating insignificant commits like this makes your feature’s history much easier to understand. This is something that git merge simply cannot do.
