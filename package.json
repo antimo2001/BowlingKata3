@@ -1,8 +1,9 @@
 {
   "name": "bowlingkata3",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "practice babel express jwt etc",
   "main": "index.js",
+  "type": "module",
   "directories": {
     "doc": "docs",
     "test": "tests"
@@ -47,6 +48,7 @@
     "test-prac2": "gulp build && node dist/tests/prac2_Objects/index",
     "test-prac3": "gulp build && node dist/tests/prac2_Objects/shiftunshift",
     "test-prac4": "gulp build && node dist/tests/prac3_babel_async/index",
+    "test-prac5": "gulp build && node --experimental-modules tests/prac4_importexport/index.js",
     "prestart": "npm install && gulp build",
     "start": "node dist/index",
     "prebuild": "npm ci",
@@ -54,5 +56,8 @@
     "postbuild": "cp package*.json ./dist && npm ci --prefix ./dist --production"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "engines": {
+    "node": ">=12"
+  }
 }
