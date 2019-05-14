@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
 
 // npm install --save @babel/polyfill
 
@@ -8,7 +8,7 @@ import 'babel-polyfill';
 // ReferenceError: regeneratorRuntime is not defined
 
 async function doPromiseStuff() {
-    await 'foo'
+    return await 'done doPromiseStuff'
 }
 
 ;(async function main() {

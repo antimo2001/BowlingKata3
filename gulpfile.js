@@ -1,5 +1,5 @@
 const gulp = require('gulp')
-const babel = require('gulp-babel')
+// const babel = require('gulp-babel')
 const nodemon = require('gulp-nodemon')
 
 const paths = ['./**/*.js', '!dist/**', '!node_modules/**']
@@ -7,7 +7,7 @@ const paths = ['./**/*.js', '!dist/**', '!node_modules/**']
 let build = () => {
   return gulp
     .src(paths)
-    .pipe(babel())
+    // .pipe(babel())
     .pipe(gulp.dest('dist'))
 }
 
